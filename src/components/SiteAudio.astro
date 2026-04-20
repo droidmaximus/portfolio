@@ -1,0 +1,125 @@
+---
+import ostSrc from "@/components/OST.mp3?url";
+---
+
+<div
+  class="pointer-events-none fixed right-3 top-24 z-[10050] md:right-5 md:top-24"
+  aria-live="polite"
+>
+  <audio id="site-ost-audio" src={ostSrc} preload="auto"></audio>
+  <button
+    type="button"
+    id="site-ost-mute"
+    class="ost-audio-btn pointer-events-auto flex h-11 w-11 select-none items-center justify-center border border-white bg-black text-white transition-all ease-in-out hover:bg-white hover:text-black"
+    aria-label="Mute background music"
+    aria-pressed="false"
+  >
+    <span class="ost-icon-on relative block h-[22px] w-[22px]" aria-hidden="true">
+      <svg
+        class="absolute left-0 top-0 h-full w-full"
+        viewBox="0 0 22 22"
+        fill="currentColor"
+        shape-rendering="crispEdges"
+        focusable="false"
+      >
+        <!-- speaker body -->
+        <rect x="2" y="8" width="5" height="6"></rect>
+        <rect x="7" y="6" width="2" height="10"></rect>
+        <rect x="9" y="5" width="2" height="12"></rect>
+        <!-- sound waves -->
+        <rect x="12" y="9" width="2" height="4"></rect>
+        <rect x="15" y="7" width="2" height="8"></rect>
+        <rect x="18" y="5" width="2" height="12"></rect>
+      </svg>
+    </span>
+    <span class="ost-icon-off relative hidden h-[22px] w-[22px]" aria-hidden="true">
+      <svg
+        class="absolute left-0 top-0 h-full w-full"
+        viewBox="0 0 22 22"
+        fill="currentColor"
+        shape-rendering="crispEdges"
+        focusable="false"
+      >
+        <rect x="2" y="8" width="5" height="6"></rect>
+        <rect x="7" y="6" width="2" height="10"></rect>
+        <rect x="9" y="5" width="2" height="12"></rect>
+        <!-- pixel X -->
+        <rect x="12" y="5" width="2" height="2"></rect>
+        <rect x="14" y="7" width="2" height="2"></rect>
+        <rect x="16" y="9" width="2" height="2"></rect>
+        <rect x="18" y="11" width="2" height="2"></rect>
+        <rect x="18" y="5" width="2" height="2"></rect>
+        <rect x="16" y="7" width="2" height="2"></rect>
+        <rect x="14" y="9" width="2" height="2"></rect>
+        <rect x="12" y="11" width="2" height="2"></rect>
+      </svg>
+    </span>
+  </button>
+</div>
+
+<script>
+  function wireOst() {
+    const audio = document.getElementById("site-ost-audio");
+    const btn = document.getElementById("site-ost-mute");
+    if (!audio || !btn || audio.dataset.ostWired === "1") return;
+    audio.dataset.ostWired = "1";
+
+    const iconOn = btn.querySelector(".ost-icon-on");
+    const iconOff = btn.querySelector(".ost-icon-off");
+    if (!iconOn || !iconOff) return;
+
+    audio.loop = false;
+
+    const syncLabel = () => {
+      const muted = audio.muted;
+      iconOn.classList.toggle("hidden", muted);
+      iconOff.classList.toggle("hidden", !muted);
+      btn.setAttribute(
+        "aria-label",
+        muted ? "Unmute background music" : "Mute background music",
+      );
+      btn.setAttribute("aria-pressed", muted ? "true" : "false");
+    };
+
+    const tryPlay = () => {
+      if (audio.ended) return;
+      void audio.play().catch(() => {});
+    };
+
+    syncLabel();
+    tryPlay();
+
+    const gesturePlay = () => {
+      if (audio.paused && !audio.ended) tryPlay();
+    };
+    document.addEventListener("click", gesturePlay, { passive: true });
+    document.addEventListener("keydown", gesturePlay, { passive: true });
+    audio.addEventListener(
+      "playing",
+      () => {
+        document.removeEventListener("click", gesturePlay);
+        document.removeEventListener("keydown", gesturePlay);
+      },
+      { once: true },
+    );
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      audio.muted = !audio.muted;
+      syncLabel();
+      if (audio.paused && !audio.ended) tryPlay();
+    });
+
+    audio.addEventListener("volumechange", syncLabel);
+  }
+
+  wireOst();
+  document.addEventListener("astro:page-load", wireOst);
+</script>
+
+<style>
+  .ost-audio-btn {
+    font-family: "VCR", monospace !important;
+    image-rendering: pixelated;
+  }
+</style>
