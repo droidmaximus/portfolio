@@ -1,6 +1,6 @@
 export const SITE_TITLE = "Avinash";
 export const SITE_DESCRIPTION =
-  "Personal portfolio — projects, writing, and stack. Built with Astro and Tailwind.".trim();
+  "Portfolio of Avinash Bhojanapalli — data science, deep learning research, projects, publications, and writing.".trim();
 
 /** Shown in the hero and footer. Change if you prefer a handle or full name. */
 export const KNOWN_TECH = [
