@@ -1,0 +1,171 @@
+---
+/** Put `hero.mp4` (and optionally `hero.webm`) in `/public`; ASCII is generated in the browser. */
+---
+
+<div
+  class="hero-ascii-root h-full w-full select-none overflow-hidden text-white [clip-path:polygon(0_0,100%_0,100%_100%,4%_100%,0_97%)]"
+  data-hero-ascii
+>
+  <video
+    class="pointer-events-none absolute h-px w-px opacity-0"
+    muted
+    autoplay
+    loop
+    playsinline
+    aria-hidden="true"
+  >
+    <source src="/hero.mp4" type="video/mp4" />
+    <source src="/hero.webm" type="video/webm" />
+  </video>
+  <pre
+    class="ascii-hero-pre m-0 block h-full max-h-full w-full max-w-none overflow-hidden whitespace-pre leading-none tracking-normal text-[clamp(0.28rem,1.45vw,0.68rem)] opacity-95 contrast-125 [font-feature-settings:normal]"
+    aria-label="ASCII art generated locally from video frames"></pre>
+</div>
+
+<script>
+  const RAMP =
+    " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
+
+  /** Stretch luminance around mid-gray before picking a glyph (higher = punchier). */
+  function contrastLum(lum, amount = 1.38) {
+    const v = (lum - 0.5) * amount + 0.5;
+    return Math.max(0, Math.min(1, v));
+  }
+
+  function initHeroAscii(root) {
+    const video = root.querySelector("video");
+    const pre = root.querySelector("pre");
+    if (!video || !pre) return () => {};
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return () => {};
+
+    let cols = 72;
+    let rows = 32;
+    let useVideo = false;
+    let t0 = performance.now();
+    let raf = 0;
+
+    const resize = () => {
+      const w = root.clientWidth || 400;
+      const h = root.clientHeight || 320;
+      const fs = parseFloat(getComputedStyle(pre).fontSize) || 10;
+      const approxChar = fs * 0.6;
+      cols = Math.max(48, Math.min(140, Math.floor(w / approxChar)));
+      /* leading-none: one line ≈ 1em tall — pack rows to fill hero height */
+      const lineH = fs * 1.02;
+      const maxRows = Math.max(16, Math.min(180, Math.floor(h / lineH)));
+      rows = maxRows;
+      canvas.width = cols;
+      canvas.height = rows;
+    };
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(root);
+    resize();
+
+    const drawFallback = (time) => {
+      const id = ctx.createImageData(cols, rows);
+      const elapsed = (time - t0) / 1000;
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const i = (y * cols + x) * 4;
+          const n =
+            Math.sin(x * 0.15 + elapsed * 1.2) *
+              Math.cos(y * 0.12 - elapsed * 0.8) *
+              0.5 +
+            0.5;
+          const v = Math.floor(n * 255);
+          id.data[i] = v;
+          id.data[i + 1] = v;
+          id.data[i + 2] = v;
+          id.data[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(id, 0, 0);
+    };
+
+    const renderAscii = () => {
+      const now = performance.now();
+      if (useVideo && video.readyState >= 2) {
+        try {
+          ctx.drawImage(video, 0, 0, cols, rows);
+        } catch {
+          useVideo = false;
+          drawFallback(now);
+        }
+      } else {
+        drawFallback(now);
+      }
+
+      const data = ctx.getImageData(0, 0, cols, rows).data;
+      let out = "";
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const i = (y * cols + x) * 4;
+          const raw =
+            (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114) /
+            255;
+          const lum = contrastLum(raw);
+          const idx = Math.min(
+            RAMP.length - 1,
+            Math.floor(lum * RAMP.length),
+          );
+          const ch = RAMP[idx];
+          /* NBSP keeps column width in monospace; U+0020 can collapse visually with some fonts */
+          out += ch === " " ? "\u00A0" : ch;
+        }
+        out += "\n";
+      }
+      pre.textContent = out;
+    };
+
+    const tick = () => {
+      renderAscii();
+      raf = requestAnimationFrame(tick);
+    };
+
+    const onReady = () => {
+      video
+        .play()
+        .then(() => {
+          useVideo = true;
+        })
+        .catch(() => {
+          useVideo = false;
+        });
+    };
+
+    video.addEventListener("loadeddata", onReady);
+    video.addEventListener("canplay", onReady);
+    video.addEventListener("error", () => {
+      useVideo = false;
+    });
+
+    if (video.readyState >= 2) onReady();
+
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }
+
+  let dispose = () => {};
+
+  function boot() {
+    dispose();
+    const root = document.querySelector("[data-hero-ascii]");
+    if (!root) {
+      dispose = () => {};
+      return;
+    }
+    const d = initHeroAscii(root);
+    dispose = typeof d === "function" ? d : () => {};
+  }
+
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>

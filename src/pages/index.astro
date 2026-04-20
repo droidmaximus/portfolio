@@ -1,0 +1,103 @@
+---
+import Hero from "@/components/Hero.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Section from "@/components/Section.astro";
+import Layout from "@/layouts/Layout.astro";
+import {
+  KNOWN_TECH,
+  ABOUT_ME,
+  FEATURED_PROJECTS,
+  PUBLICATIONS,
+} from "@/consts";
+---
+
+<Layout title="Avinash — Portfolio">
+  <Hero />
+  <Section title="About Me">
+    <div class="w-full grid place-items-center">
+      <div
+        class="max-w-4xl text-xl md:text-lg opacity-90 text-center justify-evenly"
+      >
+        <p>{ABOUT_ME}</p>
+      </div>
+    </div>
+  </Section>
+  <Section title="Publications" full_screen={false}>
+    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+      {
+        PUBLICATIONS.map((paper) => (
+          <div class="w-full mx-auto bg-gradient-to-br relative pb-5 from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
+            <div class="flex items-center justify-start px-4 py-2 bg-white/95">
+              <div class="flex space-x-2">
+                <div class="w-3 h-3 rounded-full bg-black"></div>
+                <div class="w-3 h-3 rounded-full bg-black"></div>
+                <div class="w-3 h-3 rounded-full bg-black"></div>
+              </div>
+            </div>
+            <div class="p-6 tracking-wider">
+              <a href={paper.href} target="_blank" rel="noopener noreferrer" class="block group">
+                <h2 class="text-xl font-medium text-white mb-2">
+                  <span class="ba text-white/70 mr-2">❯</span>
+                  {paper.title}
+                </h2>
+                <p class="text-white font-medium tracking-widest text-sm mb-4">
+                  [{paper.venue} · {paper.year}]
+                </p>
+                <p class="text-white absolute bottom-4 font-medium inline-flex items-center group-hover:underline-offset-4 underline-offset-8 underline transition-all ease-in-out">
+                  View publication
+                  <svg class="w-4 h-4 ml-2 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-jine-join="round" stroke-width={2} d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </p>
+              </a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+  <Section title="Featured Projects" full_screen={false}>
+    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+      {
+        FEATURED_PROJECTS.map((project) => (
+          <div class="w-full mx-auto bg-gradient-to-br relative pb-5 from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
+            <div class="flex items-center justify-start px-4 py-2 bg-white/95">
+              <div class="flex space-x-2">
+                <div class="w-3 h-3 rounded-full bg-black"></div>
+                <div class="w-3 h-3 rounded-full bg-black"></div>
+                <div class="w-3 h-3 rounded-full bg-black"></div>
+              </div>
+            </div>
+            <div class="p-6 tracking-wider">
+              <a href={project.href} target="_blank" rel="noopener noreferrer" class="block group">
+                <h2 class="text-xl font-medium text-white mb-2">
+                  <span class="ba text-white/70 mr-2">❯</span>
+                  {project.name}
+                </h2>
+                <p class="text-white font-medium tracking-widest text-sm mb-4">
+                  [{project.stack}]
+                </p>
+                <p class="text-white/80 text-sm font-thin mb-4 line-clamp-2">{project.description}</p>
+                <p class="text-white absolute bottom-4 font-medium inline-flex items-center group-hover:underline-offset-4 underline-offset-8 underline transition-all ease-in-out">
+                  View project
+                  <svg class="w-4 h-4 ml-2 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-jine-join="round" stroke-width={2} d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </p>
+              </a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+  <Section title="Technologies I Know" full_screen={false}>
+    <div class="w-full grid place-items-center">
+      <div
+        class="w-full gap-4 flex flex-wrap px-3 max-w-xl text-lg justify-center"
+      >
+        {KNOWN_TECH.map((x) => <Breadcrumb title={x} />)}
+      </div>
+    </div>
+  </Section>
+</Layout>
