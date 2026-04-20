@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import "@/styles/global.css";
+import { ABOUT_ME, SITE_TITLE } from "@/consts";
 
 interface Props {
   title: string;
@@ -15,14 +16,13 @@ const {
   description = ABOUT_ME,
   image = "/image.jpg",
 } = Astro.props;
-import { ABOUT_ME, SITE_TITLE } from "@/consts";
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<meta name="generator" content={Astro.generator} />
+<meta name="author" content="Avinash Bhojanapalli" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- Font preloads -->
@@ -48,6 +48,7 @@ import { ABOUT_ME, SITE_TITLE } from "@/consts";
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:site_name" content="Avinash" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
