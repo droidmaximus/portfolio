@@ -32,19 +32,34 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
             !isExternal &&
             (internalPath === pathname.replace(/^\//, "") ||
               internalPath === (subpath?.[0] || ""));
+          const isResumePreview = Boolean(link.resumePreview && link.href);
+
           return (
             <>
-              <a
-                class:list={[{ "bg-white text-black": isActive }]}
-                class="hover:bg-white hover:text-black transition-all ease-in-out px-2 max-w-fit"
-                href={resolvedHref}
-                {...(link.download ? { download: true } : {})}
-                {...(isExternal
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
-              >
-                <div>{link.title}</div>
-              </a>
+              {isResumePreview ? (
+                <button
+                  type="button"
+                  class:list={[{ "bg-white text-black": isActive }]}
+                  class="hover:bg-white hover:text-black transition-all ease-in-out px-2 max-w-fit text-left"
+                  data-open-resume-preview
+                  aria-haspopup="dialog"
+                  aria-controls="resume-preview-dialog"
+                >
+                  <div>{link.title}</div>
+                </button>
+              ) : (
+                <a
+                  class:list={[{ "bg-white text-black": isActive }]}
+                  class="hover:bg-white hover:text-black transition-all ease-in-out px-2 max-w-fit"
+                  href={resolvedHref}
+                  {...(link.download ? { download: true } : {})}
+                  {...(isExternal
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  <div>{link.title}</div>
+                </a>
+              )}
               <div class="hidden md:block">/</div>
             </>
           );

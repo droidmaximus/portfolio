@@ -1,7 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import "@/styles/global.css";
-import { ABOUT_ME, SITE_TITLE } from "@/consts";
+import { ABOUT_ME, SITE_OG_IMAGE, SITE_TITLE } from "@/consts";
 
 interface Props {
   title: string;
@@ -14,7 +14,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const {
   title = SITE_TITLE,
   description = ABOUT_ME,
-  image = "/image.jpg",
+  image = SITE_OG_IMAGE,
 } = Astro.props;
 ---
 

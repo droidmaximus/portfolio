@@ -2,6 +2,15 @@ export const SITE_TITLE = "Avinash";
 export const SITE_DESCRIPTION =
   "Portfolio of Avinash Bhojanapalli — data science, deep learning research, projects, publications, and writing.".trim();
 
+/** Default Open Graph / Twitter card image (absolute path under `public/`). */
+export const SITE_OG_IMAGE = "/screenshot.png";
+
+/** Public path to the PDF resume (spaces OK in anchors). */
+export const RESUME_PDF_PATH = "/Avinash Bhojanapalli.pdf";
+
+/** Same file, encoded for `<iframe src>` and other embeds. */
+export const RESUME_PDF_SRC = encodeURI(RESUME_PDF_PATH);
+
 /** Shown in the hero and footer. Change if you prefer a handle or full name. */
 export const KNOWN_TECH = [
   "Python",
@@ -69,7 +78,7 @@ export const PROFILE_LINKS: Array<{ label: string; href: string }> = [
     label: "LinkedIn",
     href: "//www.linkedin.com/in/avinash-bhojanapalli/",
   },
-  { label: "Resume", href: "/Avinash Bhojanapalli.pdf" },
+  { label: "Resume", href: RESUME_PDF_PATH },
 ];
 
 export const FEATURED_PROJECTS: Array<{
@@ -220,8 +229,14 @@ export const PUBLICATIONS: Array<{
   },
 ];
 
-export const NAV_LINKS: Array<{ title: string; href?: string; download?: boolean }> = [
+export const NAV_LINKS: Array<{
+  title: string;
+  href?: string;
+  download?: boolean;
+  /** Opens in-header preview modal instead of navigating away. */
+  resumePreview?: boolean;
+}> = [
   { title: "Github", href: "//github.com/" + GITHUB_USERNAME },
   { title: "Scholar", href: "//scholar.google.com/citations?user=54hzlgUAAAAJ" },
-  { title: "Resume", href: "/Avinash Bhojanapalli.pdf", download: true },
+  { title: "Resume", href: RESUME_PDF_PATH, resumePreview: true },
 ];
