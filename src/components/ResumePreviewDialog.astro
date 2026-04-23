@@ -1,0 +1,150 @@
+---
+import { RESUME_PDF_PATH, RESUME_PDF_SRC } from "@/consts";
+---
+
+<dialog
+  id="resume-preview-dialog"
+  class="resume-preview-dialog h-[min(92vh,56rem)] max-h-[96vh] w-[min(96vw,52rem)] border-2 border-white bg-black p-0 text-white"
+  aria-labelledby="resume-preview-title"
+>
+  <div
+    class="relative z-10 flex shrink-0 items-center justify-between gap-3 border-b border-white/20 bg-black px-4 py-3"
+  >
+    <h2 id="resume-preview-title" class="text-sm font-medium uppercase tracking-widest">
+      Resume
+    </h2>
+    <button
+      type="button"
+      data-resume-preview-close
+      class="pointer-events-auto relative z-20 border border-white/40 px-2 py-1 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black"
+      onclick="document.getElementById('resume-preview-dialog')?.close()"
+    >
+      Close
+    </button>
+  </div>
+  <div class="relative isolate min-h-0 flex-1 w-full overflow-hidden bg-zinc-950">
+    <iframe
+      id="resume-preview-iframe"
+      title="Resume PDF preview"
+      src="about:blank"
+      data-pdf-src={RESUME_PDF_SRC}
+      class="absolute inset-0 h-full w-full border-0 bg-zinc-950 [content-visibility:auto]"
+    ></iframe>
+  </div>
+  <div
+    class="relative z-10 flex shrink-0 flex-wrap items-center justify-end gap-2 border-t border-white/20 bg-black px-4 py-3"
+  >
+    <a
+      href={RESUME_PDF_PATH}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="border border-white/40 px-3 py-1.5 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black"
+    >
+      Open in new tab
+    </a>
+    <a
+      href={RESUME_PDF_PATH}
+      download
+      class="border border-white bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-black hover:bg-white/90"
+    >
+      Download PDF
+    </a>
+  </div>
+</dialog>
+
+<script>
+  const DIALOG_ID = "resume-preview-dialog";
+
+  function getDialog() {
+    return document.getElementById(DIALOG_ID);
+  }
+
+  function getResumeIframe(dialog: HTMLDialogElement) {
+    return dialog.querySelector("#resume-preview-iframe");
+  }
+
+  /** Tear down the PDF viewer so browser compositor layers do not linger after close. */
+  function blankResumeIframe(dialog: HTMLDialogElement) {
+    const iframe = getResumeIframe(dialog);
+    if (iframe instanceof HTMLIFrameElement) {
+      iframe.src = "about:blank";
+      iframe.removeAttribute("srcdoc");
+    }
+  }
+
+  function loadResumePdf(dialog: HTMLDialogElement) {
+    const iframe = getResumeIframe(dialog);
+    if (!(iframe instanceof HTMLIFrameElement)) return;
+    const url = iframe.getAttribute("data-pdf-src");
+    if (url) iframe.src = url;
+  }
+
+  function wireResumePreview() {
+    const dialog = getDialog();
+    const triggers = document.querySelectorAll("[data-open-resume-preview]");
+    if (!dialog || !(dialog instanceof HTMLDialogElement)) return;
+
+    const onOpen = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (dialog.open) return;
+      dialog.showModal();
+      requestAnimationFrame(() => loadResumePdf(dialog));
+    };
+
+    triggers.forEach((btn) => {
+      if (btn.dataset.resumePreviewWired === "1") return;
+      btn.dataset.resumePreviewWired = "1";
+      btn.addEventListener("click", onOpen);
+    });
+
+    if (dialog.dataset.resumeDialogWired === "1") return;
+    dialog.dataset.resumeDialogWired = "1";
+
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+
+    dialog.addEventListener("close", () => {
+      blankResumeIframe(dialog);
+    });
+  }
+
+  function onDocPointerDownCapture(e: Event) {
+    const t = e.target;
+    if (!(t instanceof Element)) return;
+    if (!t.closest("[data-resume-preview-close]")) return;
+    const dialog = getDialog();
+    if (!(dialog instanceof HTMLDialogElement) || !dialog.open) return;
+    e.preventDefault();
+    e.stopPropagation();
+    dialog.close();
+  }
+
+  if (!document.documentElement.dataset.resumePreviewDocClose) {
+    document.documentElement.dataset.resumePreviewDocClose = "1";
+    document.addEventListener("pointerdown", onDocPointerDownCapture, true);
+  }
+
+  wireResumePreview();
+  document.addEventListener("astro:page-load", wireResumePreview);
+</script>
+
+<style is:global>
+  /*
+   * Tailwind `flex` on <dialog> overrides the UA's closed-state `display: none`,
+   * which leaves the frame visible after close(). Force hide when not open.
+   */
+  .resume-preview-dialog:not([open]) {
+    display: none !important;
+  }
+
+  .resume-preview-dialog[open] {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .resume-preview-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.78);
+  }
+</style>

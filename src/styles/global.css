@@ -20,7 +20,11 @@ code {
     "Liberation Mono", "Courier New", monospace !important;
   letter-spacing: 0 !important;
   white-space: pre !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
+  color: #fafafa;
+  filter: contrast(1.35) brightness(1.12);
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 2px rgba(255, 255, 255, 0.2);
 }
 
 ::selection {

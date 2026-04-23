@@ -18,7 +18,7 @@
     <source src="/hero.webm" type="video/webm" />
   </video>
   <pre
-    class="ascii-hero-pre m-0 block h-full max-h-full w-full max-w-none overflow-hidden whitespace-pre leading-none tracking-normal text-[clamp(0.16rem,0.8vw,0.4rem)] opacity-95 contrast-150 [font-feature-settings:normal]"
+    class="ascii-hero-pre m-0 block h-full max-h-full w-full max-w-none overflow-hidden whitespace-pre leading-none tracking-normal text-[clamp(0.16rem,0.8vw,0.4rem)] text-white opacity-100 contrast-150 [font-feature-settings:normal]"
     aria-label="ASCII art generated locally from video frames"></pre>
 </div>
 
@@ -27,7 +27,7 @@
     " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 
   /** Stretch luminance around mid-gray before picking a glyph (higher = punchier). */
-  function contrastLum(lum, amount = 1.62) {
+  function contrastLum(lum, amount = 2.05) {
     const v = (lum - 0.5) * amount + 0.5;
     return Math.max(0, Math.min(1, v));
   }

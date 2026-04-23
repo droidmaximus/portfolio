@@ -1,6 +1,7 @@
 ---
 import BaseHead from "@/components/BaseHead.astro";
 import Navbar from "@/components/Navbar.astro";
+import ResumePreviewDialog from "@/components/ResumePreviewDialog.astro";
 import Footer from "@/components/Footer.astro";
 import SiteAudio from "@/components/SiteAudio.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
@@ -15,6 +16,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 
   <body class="bg-black text-white tracking-wide !overflow-x-hidden">
     <header class="fixed top-0 w-screen z-[9999]"><Navbar /></header>
+    <ResumePreviewDialog />
     <SiteAudio />
     <main class="pt-28 md:pt-20"><slot /></main>
     <footer class="w-screen bottom-0 overflow-x-hidden"><Footer /></footer>

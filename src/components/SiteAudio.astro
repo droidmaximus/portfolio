@@ -63,6 +63,7 @@ import ostSrc from "@/components/OST.mp3?url";
     const btn = document.getElementById("site-ost-mute");
     if (!audio || !btn || audio.dataset.ostWired === "1") return;
     audio.dataset.ostWired = "1";
+    audio.volume = 0.32;
 
     const iconOn = btn.querySelector(".ost-icon-on");
     const iconOff = btn.querySelector(".ost-icon-off");
