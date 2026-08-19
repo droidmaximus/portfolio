@@ -1,6 +1,6 @@
 export const SITE_TITLE = "Avinash";
 export const SITE_DESCRIPTION =
-  "Portfolio of Avinash Bhojanapalli — data science, deep learning research, projects, publications, and writing.".trim();
+  "Portfolio of Avinash Bhojanapalli, based in the San Francisco Bay Area. Data science, deep learning research, projects, publications, and writing.".trim();
 
 /** Default Open Graph / Twitter card image (absolute path under `public/`). */
 export const SITE_OG_IMAGE = "/screenshot.png";
@@ -61,12 +61,14 @@ export const KNOWN_TECH = [
 ];
 
 export const ABOUT_ME =
-  "Data Scientist and Deep Learning researcher focused on turning difficult datasets into practical systems. I work across time series, quantitative modeling, document intelligence, and ML tooling, with an emphasis on reproducible experiments and production-ready results.".trim();
+  "Data Scientist and Deep Learning researcher based in the San Francisco Bay Area, focused on turning difficult datasets into practical systems. I work across time series, quantitative modeling, document intelligence, and ML tooling, with an emphasis on reproducible experiments and production-ready results.".trim();
 
 /** Used for the GitHub nav link. */
 export const GITHUB_USERNAME = "droidmaximus";
 
 export const QUOTE = "Data Scientist · Deep Learning Researcher";
+
+export const LOCATION = "San Francisco Bay Area";
 
 export const PROFILE_LINKS: Array<{ label: string; href: string }> = [
   { label: "GitHub", href: "//github.com/droidmaximus/" },
@@ -139,6 +141,19 @@ export const CAREER_EXPERIENCE: Array<{
   highlights: string[];
   skills?: string;
 }> = [
+  {
+    role: "Founding Machine Learning Engineer",
+    company: "dCortex",
+    employmentType: "Full-time",
+    period: "May 2026 - Aug 2026",
+    location: "San Francisco Bay Area",
+    highlights: [
+      "Built a live 72-hour risk model for flight crew that scores disruption and legality exposure so controllers can act before coverage gaps cascade.",
+      "Built a counterfactual analysis platform for the crew recommendation service that finds the ranking changes that would have placed a controller's chosen crew first.",
+      "Built a chat agent that writes and runs SQL on the fly so controllers can fetch crew identity, reserve status, and legality details in plain language.",
+    ],
+    skills: "Python, ranking models, SQL agents, FastAPI, airline operations",
+  },
   {
     role: "Machine Learning Engineer",
     company: "Bonsai Lab RIT",
