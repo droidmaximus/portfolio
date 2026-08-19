@@ -61,7 +61,7 @@ export const KNOWN_TECH = [
 ];
 
 export const ABOUT_ME =
-  "Data Scientist and Deep Learning researcher based in the San Francisco Bay Area, focused on turning difficult datasets into practical systems. I work across time series, quantitative modeling, document intelligence, and ML tooling, with an emphasis on reproducible experiments and production-ready results.".trim();
+  "Machine learning engineer based in the San Francisco Bay Area. Recently at dCortex I built live flight-crew risk models, counterfactual analysis for crew recommendations, and a SQL chat agent for operations controllers. I also work across time series, quantitative modeling, and document intelligence, with an emphasis on systems that hold up in production.".trim();
 
 /** Used for the GitHub nav link. */
 export const GITHUB_USERNAME = "droidmaximus";
