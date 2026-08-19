@@ -1,11 +1,11 @@
 ---
 import HeroAsciiVideo from "@/components/HeroAsciiVideo.astro";
-import { QUOTE, SITE_TITLE } from "@/consts";
+import { LOCATION, QUOTE, SITE_TITLE } from "@/consts";
 ---
 
 <div class="hero-bg hidden md:block h-screen hero-bg-animate absolute top-0"></div>
 <section
-  class="min-h-screen md:h-screen !z-[20] relative w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch md:overflow-hidden"
+  class="relative z-[20] w-full grid grid-cols-1 items-stretch gap-4 md:h-screen md:grid-cols-2 md:overflow-hidden"
   id="hero"
 >
   <div class="grid place-items-center py-10 md:py-0">
@@ -14,9 +14,14 @@ import { QUOTE, SITE_TITLE } from "@/consts";
       <h2 class="text-2xl opacity-95">
         {QUOTE}
       </h2>
+      <p class="mt-3 text-base tracking-widest uppercase opacity-80">
+        {LOCATION}
+      </p>
     </div>
   </div>
-  <div class="relative min-h-[min(45vh,22rem)] w-full md:min-h-0 md:h-full">
+  <div
+    class="relative aspect-video w-full min-w-0 self-start overflow-hidden md:aspect-auto md:h-full md:self-stretch"
+  >
     <HeroAsciiVideo />
   </div>
 </section>

@@ -3,22 +3,25 @@
 ---
 
 <div
-  class="hero-ascii-root h-full w-full select-none overflow-hidden text-white [clip-path:polygon(0_0,100%_0,100%_100%,4%_100%,0_97%)]"
+  class="hero-ascii-root absolute inset-0 h-full w-full select-none overflow-hidden text-white [clip-path:polygon(0_0,100%_0,100%_100%,4%_100%,0_97%)]"
   data-hero-ascii
 >
   <video
-    class="pointer-events-none absolute h-px w-px opacity-0"
+    class="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0"
     muted
     autoplay
     loop
     playsinline
+    webkit-playsinline
+    preload="auto"
+    disablepictureinpicture
     aria-hidden="true"
   >
     <source src="/hero.mp4" type="video/mp4" />
     <source src="/hero.webm" type="video/webm" />
   </video>
   <pre
-    class="ascii-hero-pre m-0 block h-full max-h-full w-full max-w-none overflow-hidden whitespace-pre leading-none tracking-normal text-[clamp(0.16rem,0.8vw,0.4rem)] text-white opacity-100 contrast-150 [font-feature-settings:normal]"
+    class="ascii-hero-pre absolute inset-0 m-0 block h-full max-h-full w-full max-w-none overflow-hidden whitespace-pre leading-none tracking-normal text-[clamp(7px,2.2vw,10px)] text-white opacity-100 contrast-150 md:text-[clamp(0.16rem,0.8vw,0.4rem)] [font-feature-settings:normal]"
     aria-label="ASCII art generated locally from video frames"></pre>
 </div>
 
@@ -32,6 +35,34 @@
     return Math.max(0, Math.min(1, v));
   }
 
+  function measureGlyph(pre) {
+    const cs = getComputedStyle(pre);
+    const fs = parseFloat(cs.fontSize) || 10;
+    const probe = document.createElement("span");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.cssText =
+      "position:absolute;left:0;top:0;visibility:hidden;pointer-events:none;white-space:pre;letter-spacing:0;";
+    probe.textContent = "\u00A0".repeat(32);
+    pre.appendChild(probe);
+    const rect = probe.getBoundingClientRect();
+    probe.remove();
+    const charW = rect.width / 32 || fs * 0.6;
+    const lineH = rect.height || fs;
+    return { charW, lineH };
+  }
+
+  function drawVideoCover(ctx, video, cols, rows, charW, lineH) {
+    const vw = video.videoWidth || cols;
+    const vh = video.videoHeight || rows;
+    const displayW = cols * charW;
+    const displayH = rows * lineH;
+    const scale = Math.max(displayW / vw, displayH / vh);
+    const dw = (vw * scale) / charW;
+    const dh = (vh * scale) / lineH;
+    ctx.clearRect(0, 0, cols, rows);
+    ctx.drawImage(video, (cols - dw) / 2, (rows - dh) / 2, dw, dh);
+  }
+
   function initHeroAscii(root) {
     const video = root.querySelector("video");
     const pre = root.querySelector("pre");
@@ -40,23 +71,35 @@
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return () => {};
+    ctx.imageSmoothingEnabled = true;
 
     let cols = 72;
     let rows = 32;
+    let charW = 6;
+    let lineH = 10;
     let useVideo = false;
     let t0 = performance.now();
     let raf = 0;
 
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+
     const resize = () => {
-      const w = root.clientWidth || 400;
-      const h = root.clientHeight || 320;
-      const fs = parseFloat(getComputedStyle(pre).fontSize) || 10;
-      const approxChar = Math.max(1, fs * 0.58);
-      cols = Math.max(72, Math.min(360, Math.floor(w / approxChar)));
-      /* leading-none: one line ≈ 1em tall — pack rows to fill hero height */
-      const lineH = fs * 1.02;
-      const maxRows = Math.max(16, Math.min(180, Math.floor(h / lineH)));
-      rows = maxRows;
+      const w = root.clientWidth;
+      const h = root.clientHeight;
+      if (w < 8 || h < 8) return;
+      const glyph = measureGlyph(pre);
+      charW = glyph.charW;
+      lineH = glyph.lineH;
+      const narrow = window.matchMedia("(max-width: 767px)").matches;
+      const maxCols = narrow ? 96 : 360;
+      const maxRows = narrow ? 72 : 180;
+      cols = Math.max(32, Math.min(maxCols, Math.floor(w / charW)));
+      rows = Math.max(16, Math.min(maxRows, Math.floor(h / lineH)));
       canvas.width = cols;
       canvas.height = rows;
     };
@@ -88,9 +131,9 @@
 
     const renderAscii = () => {
       const now = performance.now();
-      if (useVideo && video.readyState >= 2) {
+      if (useVideo && video.readyState >= 2 && video.videoWidth > 0) {
         try {
-          ctx.drawImage(video, 0, 0, cols, rows);
+          drawVideoCover(ctx, video, cols, rows, charW, lineH);
         } catch {
           useVideo = false;
           drawFallback(now);
@@ -122,7 +165,7 @@
     };
 
     const tick = () => {
-      renderAscii();
+      if (!document.hidden) renderAscii();
       raf = requestAnimationFrame(tick);
     };
 
@@ -137,19 +180,39 @@
         });
     };
 
+    const onError = () => {
+      useVideo = false;
+    };
+
     video.addEventListener("loadeddata", onReady);
     video.addEventListener("canplay", onReady);
-    video.addEventListener("error", () => {
-      useVideo = false;
+    video.addEventListener("playing", () => {
+      useVideo = true;
     });
+    video.addEventListener("error", onError);
 
     if (video.readyState >= 2) onReady();
+
+    const unlock = () => onReady();
+    document.addEventListener("pointerdown", unlock, { passive: true });
+    document.addEventListener("touchstart", unlock, { passive: true });
+
+    const fontsReady =
+      document.fonts && document.fonts.ready
+        ? document.fonts.ready.then(resize)
+        : Promise.resolve();
 
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      video.removeEventListener("loadeddata", onReady);
+      video.removeEventListener("canplay", onReady);
+      video.removeEventListener("error", onError);
+      document.removeEventListener("pointerdown", unlock);
+      document.removeEventListener("touchstart", unlock);
+      void fontsReady;
     };
   }
 

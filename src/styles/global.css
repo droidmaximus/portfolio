@@ -25,6 +25,9 @@ code {
   filter: contrast(1.35) brightness(1.12);
   text-shadow: 0 0 1px rgba(255, 255, 255, 0.45),
     0 0 2px rgba(255, 255, 255, 0.2);
+  /* iOS inflates tiny text, which makes ASCII rows overflow and clip. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 ::selection {
