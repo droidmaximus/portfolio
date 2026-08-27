@@ -1,6 +1,6 @@
 export const SITE_TITLE = "Avinash";
 export const SITE_DESCRIPTION =
-  "Portfolio of Avinash Bhojanapalli, based in the San Francisco Bay Area. Data science, deep learning research, projects, publications, and writing.".trim();
+  "Portfolio of Avinash Bhojanapalli, based in Sunnyvale, CA. Data science, deep learning research, projects, publications, and writing.".trim();
 
 /** Default Open Graph / Twitter card image (absolute path under `public/`). */
 export const SITE_OG_IMAGE = "/screenshot.png";
@@ -61,14 +61,14 @@ export const KNOWN_TECH = [
 ];
 
 export const ABOUT_ME =
-  "Machine learning engineer based in the San Francisco Bay Area. Recently at dCortex I built live flight-crew risk models, counterfactual analysis for crew recommendations, and a SQL chat agent for operations controllers. I also work across time series, quantitative modeling, and document intelligence, with an emphasis on systems that hold up in production.".trim();
+  "Machine learning engineer based in Sunnyvale, CA. Recently at dCortex I built live flight-crew risk models, counterfactual analysis for crew recommendations, and a SQL chat agent for operations controllers. I also work across time series, quantitative modeling, and document intelligence, with an emphasis on systems that hold up in production.".trim();
 
 /** Used for the GitHub nav link. */
 export const GITHUB_USERNAME = "droidmaximus";
 
 export const QUOTE = "Data Scientist · Deep Learning Researcher";
 
-export const LOCATION = "San Francisco Bay Area";
+export const LOCATION = "Sunnyvale, CA";
 
 export const PROFILE_LINKS: Array<{ label: string; href: string }> = [
   { label: "GitHub", href: "//github.com/droidmaximus/" },
@@ -142,15 +142,15 @@ export const CAREER_EXPERIENCE: Array<{
   skills?: string;
 }> = [
   {
-    role: "Founding Machine Learning Engineer",
+    role: "ML Engineer",
     company: "dCortex",
     employmentType: "Full-time",
-    period: "May 2026 - Aug 2026",
-    location: "San Francisco Bay Area",
+    period: "May 2026 - Present",
+    location: "Sunnyvale, CA",
     highlights: [
-      "Built a live 72-hour risk model for flight crew that scores disruption and legality exposure so controllers can act before coverage gaps cascade.",
-      "Built a counterfactual analysis platform for the crew recommendation service that finds the ranking changes that would have placed a controller's chosen crew first.",
-      "Built a chat agent that writes and runs SQL on the fly so controllers can fetch crew identity, reserve status, and legality details in plain language.",
+      "Built a live 72-hour flight-crew risk model that scores disruption and legality exposure across 8,000+ crew-duty pairs per window in under 100ms, cutting last-minute coverage scrambles ~40%.",
+      "Built a counterfactual analysis platform for the crew recommendation service that finds the ranking changes that would have placed a controller's chosen crew first, cutting override diagnosis ~70% (full-slate review to seconds) across 400+ live decisions.",
+      "Built a chat agent that writes and runs SQL on the fly so controllers can fetch crew identity, reserve status, and legality details in plain language, cutting lookup time ~80% (minutes of AIMS clicks to seconds).",
     ],
     skills: "Python, ranking models, SQL agents, FastAPI, airline operations",
   },
