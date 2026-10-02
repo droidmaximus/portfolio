@@ -1,6 +1,6 @@
 export const SITE_TITLE = "Avinash";
 export const SITE_DESCRIPTION =
-  "Portfolio of Avinash Bhojanapalli, based in Sunnyvale, CA. Data science, deep learning research, projects, publications, and writing.".trim();
+  "Portfolio of Avinash Bhojanapalli, a machine learning engineer based in Sunnyvale, CA. Production ML systems, projects, and publications.".trim();
 
 /** Default Open Graph / Twitter card image (absolute path under `public/`). */
 export const SITE_OG_IMAGE = "/screenshot.png";
@@ -19,9 +19,9 @@ export const KNOWN_TECH = [
   "Rust",
   "SQL",
   "Bash",
-  "FastAPI",
   "RESTful APIs",
   "Microservices",
+  "FastAPI",
   "Linux",
   "Git",
   "Docker",
@@ -37,6 +37,9 @@ export const KNOWN_TECH = [
   "TensorFlow",
   "Scikit-learn",
   "Pandas",
+  "Hugging Face",
+  "LangChain",
+  "ONNX",
   "PostgreSQL",
   "MongoDB",
   "Redis",
@@ -44,29 +47,15 @@ export const KNOWN_TECH = [
   "Apache Kafka",
   "Neo4j",
   "SQLite",
-  "Hugging Face",
-  "LangChain",
-  "ONNX",
-  "TypeScript",
-  "JavaScript",
-  "Astro",
-  "React",
-  "Fiber (Go)",
-  "Flask",
-  "RabbitMQ",
-  "WebSockets",
-  "Tailwind CSS",
-  "HTML",
-  "CSS",
 ];
 
 export const ABOUT_ME =
-  "Machine learning engineer based in Sunnyvale, CA. Recently at dCortex I built live flight-crew risk models, counterfactual analysis for crew recommendations, and a SQL chat agent for operations controllers. I also work across time series, quantitative modeling, and document intelligence, with an emphasis on systems that hold up in production.".trim();
+  "Machine learning engineer based in Sunnyvale, CA. I build production systems for live decisioning, retrieval, and research: a 72-hour crew-risk model and SQL chat agent at dCortex, self-supervised learning pipelines at Bonsai Lab, and MLOps for multi-agent systems. M.S. in Data Science from Rochester Institute of Technology.".trim();
 
 /** Used for the GitHub nav link. */
 export const GITHUB_USERNAME = "droidmaximus";
 
-export const QUOTE = "Data Scientist · Deep Learning Researcher";
+export const QUOTE = "Machine Learning Engineer";
 
 export const LOCATION = "Sunnyvale, CA";
 
@@ -88,47 +77,43 @@ export const FEATURED_PROJECTS: Array<{
   description: string;
   stack: string;
   href: string;
+  highlights: string[];
 }> = [
   {
-    name: "crosstem",
+    name: "Crosstem",
     description:
-      "Python package for cross-sectional and time-series market workflows.",
-    stack: "Python · PyPI",
+      "High-performance multilingual NLP stemming library with a Rust core and a Python API.",
+    stack: "Rust · Python · PyO3 · PyPI",
     href: "//pypi.org/project/crosstem/",
+    highlights: [
+      "Rust-accelerated stemming core (PyO3) with a Python API, 2.7–2.9× faster than the Python fallback and 15× higher throughput than Porter on benchmark workloads.",
+      "Graph-based morphological pipeline (BFS and productivity-threshold scoring) that limits overstemming and maps across part-of-speech boundaries.",
+      "Shipped on PyPI with parity-tested Rust and Python backends, production packaging, and docs for install, API use, and performance checks.",
+    ],
   },
   {
-    name: "ledgerline",
-    description: "Vectorless RAG demo stack focused on financial PDFs.",
-    stack: "TypeScript · RAG",
+    name: "Ledgerline",
+    description:
+      "Event-driven, vectorless RAG engine for long financial filings.",
+    stack: "Go · Python · Kafka · Redis",
     href: "//github.com/droidmaximus/ledgerline",
+    highlights: [
+      "Replaced chunk-based retrieval with hierarchical tree navigation so context holds across 200+ page financial filings.",
+      "Go (Fiber) API gateway with WebSocket streaming, Redis-cached document trees, and query latency under 3 seconds.",
+      "Kafka handoff between services and an LLM-as-a-judge layer on PostgreSQL to score responses and catch hallucinations.",
+    ],
   },
   {
-    name: "topological-arbitrage",
+    name: "Topological Arbitrage Engine",
     description:
-      "Adaptive market-neutral statistical arbitrage using graph diffusion and regime detection.",
-    stack: "Python · Quant Research",
+      "Market-neutral quant strategy that isolates idiosyncratic alpha with graph diffusion.",
+    stack: "Python · Pandas · SciPy · Flask",
     href: "//github.com/droidmaximus/topological-arbitrage",
-  },
-  {
-    name: "zoomllm",
-    description:
-      "LLM-focused experimentation repository for applied model workflows.",
-    stack: "Python · LLMs",
-    href: "//github.com/droidmaximus/zoomllm",
-  },
-  {
-    name: "asciimation",
-    description:
-      "ASCII animation experiments and rendering utilities in Python.",
-    stack: "Python · Visualization",
-    href: "//github.com/droidmaximus/asciimation",
-  },
-  {
-    name: "tax_filing",
-    description:
-      "Automation-oriented project for tax filing and structured data processing.",
-    stack: "Python · Automation",
-    href: "//github.com/droidmaximus/tax_filing",
+    highlights: [
+      "Statistical arbitrage engine that applies graph Laplacian diffusion to CAPM residuals across a dynamic 80-stock universe.",
+      "Walk-forward validation on out-of-sample 2025–2026 data: 42.5% annualized return and a 1.99 Sharpe ratio, with the signal holding through volatile regimes.",
+      "Live paper-trading loop with daily execution, equal-weight sizing, and a local dashboard for portfolio telemetry.",
+    ],
   },
 ];
 
@@ -142,81 +127,60 @@ export const CAREER_EXPERIENCE: Array<{
   skills?: string;
 }> = [
   {
-    role: "ML Engineer",
+    role: "Founding Machine Learning Engineer",
     company: "dCortex",
     employmentType: "Full-time",
-    period: "May 2026 - Present",
-    location: "Sunnyvale, CA",
+    period: "May 2026 – Sep 2026",
     highlights: [
-      "Built a live 72-hour flight-crew risk model that scores disruption and legality exposure across 8,000+ crew-duty pairs per window in under 100ms, cutting last-minute coverage scrambles ~40%.",
-      "Built a counterfactual analysis platform for the crew recommendation service that finds the ranking changes that would have placed a controller's chosen crew first, cutting override diagnosis ~70% (full-slate review to seconds) across 400+ live decisions.",
-      "Built a chat agent that writes and runs SQL on the fly so controllers can fetch crew identity, reserve status, and legality details in plain language, cutting lookup time ~80% (minutes of AIMS clicks to seconds).",
+      "Cut last-minute coverage scrambles ~40% by building a live 72-hour risk model that scores 8,000+ crew-duty pairs per window in under 100ms.",
+      "Cut override diagnosis ~70%, from a full-slate review to seconds, by building counterfactual analysis across 400+ live decisions.",
+      "Built a chat agent that writes and runs SQL so controllers can fetch crew identity, reserve status, and legality details in plain language, cutting lookup time ~80%.",
     ],
-    skills: "Python, ranking models, SQL agents, FastAPI, airline operations",
   },
   {
     role: "Machine Learning Engineer",
-    company: "Bonsai Lab RIT",
+    company: "Bonsai Lab, RIT",
     employmentType: "Research",
-    period: "Aug 2025 - Apr 2026",
+    period: "Aug 2025 – Apr 2026",
     highlights: [
-      "Architected a modular Self-Supervised Learning (SSL) pipeline in PyTorch, enabling faster representation testing and reducing experiment iteration time by 60%.",
-      "Optimized data loading with pre-fetching and caching, increasing GPU utilization and reducing training time.",
-      "Implemented automated experiment tracking and artifact versioning to ensure reproducibility across distributed training and standardize team-wide metric reporting.",
-    ],
-    skills: "PyTorch, Self-Supervised Learning, Experiment Tracking",
-  },
-  {
-    role: "Graduate Researcher",
-    company: "Rochester Institute of Technology",
-    employmentType: "Part-time",
-    period: "Oct 2025 - Dec 2025",
-    location: "Rochester, New York, United States · On-site",
-    highlights: [
-      "Conducted in-depth research on ontologies for deepfake detection under the guidance of Dr. Matthew Wright.",
-      "Collaborated with a multidisciplinary team to explore innovative solutions in cybersecurity.",
-      "Engaged in critical analysis and evaluation of existing deepfake detection methodologies.",
-      "Developed skills in research methodologies, data analysis, and cybersecurity principles.",
-    ],
-    skills: "Data Analysis",
-  },
-  {
-    role: "Co-Founder",
-    company: "ZoAI",
-    employmentType: "Self-employed",
-    period: "Apr 2024 - Nov 2024",
-    highlights: [
-      "Co-founded ZoAI and was instrumental in developing an AI-driven call assistant for healthcare clients.",
-      "Built and managed a web application and backend system to streamline communication across 20+ clinics.",
-      "Collaborated with the team to maintain high service uptime and responsiveness to client needs.",
-      "Worked directly with clients to capture requirements and implement feedback-driven service enhancements.",
+      "Cut experiment iteration time by 60% with a modular PyTorch self-supervised learning pipeline for rapid representation comparisons.",
+      "Optimized data loading with pre-fetching and caching, raising GPU utilization and shortening training time.",
+      "Added automated experiment tracking and artifact versioning so distributed runs stay reproducible and metrics are reported the same way across the team.",
     ],
   },
   {
-    role: "Machine Learning Engineer Intern",
+    role: "MLOps Engineer Intern",
     company: "Incribo",
-    employmentType: "Full-time",
-    period: "Jan 2024 - Jul 2024",
-    location: "Bangalore",
+    employmentType: "Internship",
+    period: "Jan 2024 – Jul 2024",
     highlights: [
-      "Designed and deployed a fault-tolerant microservices architecture for multi-agent AI systems on Kubernetes and Docker with RabbitMQ for asynchronous messaging.",
-      "Optimized Large Language Model (LLM) serving with gradient checkpointing and dynamic batching, reducing GPU memory usage by 15% and improving inference latency.",
-      "Developed a Go-based CLI to automate container orchestration and deployment workflows, improving consistency across environments.",
-      "Integrated synthetic data generation workflows using CPPN-NEAT neuroevolution, scaling generation rates by 15% for stronger training and validation.",
+      "Designed and deployed a fault-tolerant microservices architecture for multi-agent AI systems on Kubernetes and Docker, using RabbitMQ for asynchronous messaging.",
+      "Cut GPU memory use by 15% and improved inference latency by serving LLMs with gradient checkpointing and dynamic batching.",
+      "Built a Go CLI to automate container orchestration and deployment so dev and production environments stay consistent.",
+      "Integrated synthetic data generation with CPPN-NEAT neuroevolution, raising generation rates by 15% for training and validation.",
     ],
-    skills: "Kubernetes, Docker, RabbitMQ, Go, LLM Serving",
+  },
+];
+
+export const EDUCATION: Array<{
+  school: string;
+  degree: string;
+  detail?: string;
+  period: string;
+  location: string;
+}> = [
+  {
+    school: "Rochester Institute of Technology",
+    degree: "M.S. Data Science",
+    detail: "GPA 3.9/4.0",
+    period: "Aug 2024 – Apr 2026",
+    location: "Rochester, NY",
   },
   {
-    role: "Data Science/ML TA",
-    company: "Scaler",
-    employmentType: "Part-time",
-    period: "Nov 2022 - Dec 2023",
-    location: "Bangalore",
-    highlights: [
-      "Mentored 200+ students through weekly live sessions, small-group breakouts, and personalized office hours, maintaining a 4.8/5 feedback score.",
-      "Designed real-world assessments and automated grading workflows using tools such as scikit-learn and PySpark to improve engagement and outcomes.",
-    ],
-    skills: "Deep Learning, Data Science, scikit-learn, PySpark",
+    school: "IIIT Sri City",
+    degree: "B.Tech Computer Science and Engineering",
+    period: "Dec 2020 – May 2024",
+    location: "India",
   },
 ];
 
@@ -228,19 +192,17 @@ export const PUBLICATIONS: Array<{
 }> = [
   {
     title:
-      "A CALIPSO observation based 3-dimensional tropospheric aerosol classification model over Delhi",
+      "A CALIPSO Observation Based 3-Dimensional Tropospheric Aerosol Classification Model Over Delhi",
     venue: "IGARSS",
     year: 2023,
-    href:
-      "//scholar.google.com/citations?view_op=view_citation&hl=en&user=54hzlgUAAAAJ&citation_for_view=54hzlgUAAAAJ:u5HHmVD_uO8C",
+    href: "https://doi.org/10.1109/IGARSS52108.2023.10282609",
   },
   {
     title:
       "Evolving RNNs for Stock Forecasting: A Low Parameter Efficient Alternative to Transformers",
     venue: "EvoApplications",
     year: 2025,
-    href:
-      "//scholar.google.com/citations?view_op=view_citation&hl=en&user=54hzlgUAAAAJ&citation_for_view=54hzlgUAAAAJ:u-x6o8ySG0sC",
+    href: "https://doi.org/10.1007/978-3-031-90065-5_3",
   },
 ];
 
@@ -252,6 +214,9 @@ export const NAV_LINKS: Array<{
   resumePreview?: boolean;
 }> = [
   { title: "Github", href: "//github.com/" + GITHUB_USERNAME },
-  { title: "Scholar", href: "//scholar.google.com/citations?user=54hzlgUAAAAJ" },
+  {
+    title: "Scholar",
+    href: "//scholar.google.com/citations?user=54hzlgUAAAAJ",
+  },
   { title: "Resume", href: RESUME_PDF_PATH, resumePreview: true },
 ];
