@@ -7,7 +7,7 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
 
 <div
   id="twitter-feed-card"
-  class="flex h-[70vh] flex-col overflow-hidden rounded-lg border-2 border-white bg-gradient-to-br from-white/[0.001] to-white/[0.01] lg:h-auto lg:min-h-0 lg:flex-1"
+  class="flex h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)] min-h-0 flex-1 flex-col overflow-hidden rounded-lg border-2 border-white bg-gradient-to-br from-white/[0.001] to-white/[0.01] lg:h-full lg:max-h-full"
   data-feed-url={feedUrl}
   data-profile-url={profileUrl}
 >
@@ -122,7 +122,10 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
       var box = document.createElement("a");
       box.className =
         "mt-2 block border border-white/30 p-2 text-white no-underline";
-      if (typeof preview.url === "string" && preview.url.indexOf("https://") === 0) {
+      if (
+        typeof preview.url === "string" &&
+        preview.url.indexOf("https://") === 0
+      ) {
         box.href = preview.url;
         box.target = "_blank";
         box.rel = "noopener noreferrer";
@@ -147,7 +150,11 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
       var box = document.createElement("div");
       box.className = "mt-2 border border-white/40 p-2";
       if (quote.type === "tombstone") {
-        addText(box, quote.message || "Quoted post is unavailable", "text-xs text-white/60");
+        addText(
+          box,
+          quote.message || "Quoted post is unavailable",
+          "text-xs text-white/60",
+        );
         parent.appendChild(box);
         return;
       }
@@ -186,7 +193,11 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
       var article = document.createElement("article");
       article.className = "mb-3 border border-white/30 p-3 last:mb-0";
 
-      addText(article, status.text, "whitespace-pre-wrap text-sm text-white/90");
+      addText(
+        article,
+        status.text,
+        "whitespace-pre-wrap text-sm text-white/90",
+      );
       addMedia(article, status);
       addLinkCard(article, status);
       addQuote(article, status);
@@ -219,7 +230,8 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
               status.media &&
               Array.isArray(status.media.all) &&
               status.media.all.length > 0;
-            var hasQuote = status && status.quote && status.quote.type === "status";
+            var hasQuote =
+              status && status.quote && status.quote.type === "status";
             return (
               status &&
               isStatusUrl(status.url) &&
