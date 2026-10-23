@@ -3,13 +3,20 @@ type Props = {
   title: string;
   full_screen?: boolean;
   className?: string;
+  contained?: boolean;
 };
-const { title = "Section", full_screen = false, className = "" } = Astro.props;
+const {
+  title = "Section",
+  full_screen = false,
+  className = "",
+  contained = false,
+} = Astro.props;
+const widthClass = contained ? "w-full" : "w-screen";
 ---
 
 <section
   id={title.toLowerCase().replaceAll(" ", "")}
-  class={`${full_screen ? "h-screen" : ""} px-4 py-10 w-screen !overflow-x-hidden ${className}`}
+  class={`${full_screen ? "h-screen" : ""} px-4 py-10 ${widthClass} !overflow-x-hidden ${className}`}
 >
   <div class="w-full grid place-items-center">
     <h2 class="text-4xl md:text-6xl text-center">{`<${title} />`}</h2>

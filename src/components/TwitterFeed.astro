@@ -1,0 +1,82 @@
+---
+import { TWITTER_HANDLE } from "@/consts";
+
+const profileUrl = `https://x.com/${TWITTER_HANDLE}`;
+---
+
+<div
+  id="twitter-feed-card"
+  class="flex h-[70vh] flex-col overflow-hidden rounded-lg border-2 border-white bg-gradient-to-br from-white/[0.001] to-white/[0.01] lg:h-auto lg:min-h-0 lg:flex-1"
+>
+  <div class="flex items-center justify-start bg-white/95 px-4 py-2">
+    <div class="flex space-x-2">
+      <div class="h-3 w-3 rounded-full bg-black"></div>
+      <div class="h-3 w-3 rounded-full bg-black"></div>
+      <div class="h-3 w-3 rounded-full bg-black"></div>
+    </div>
+  </div>
+  <div class="flex min-h-0 flex-1 flex-col p-6 tracking-wider">
+    <a
+      href={profileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mb-4 text-xl font-medium text-white"
+    >
+      <span class="ba mr-2 text-white/70">❯</span>@{TWITTER_HANDLE}
+    </a>
+    <div class="min-h-0 flex-1 overflow-hidden">
+      <a
+        id="twitter-feed-timeline"
+        class="twitter-timeline"
+        href={profileUrl}
+        data-theme="dark"
+        data-chrome="noheader nofooter noborders transparent"
+        data-link-color="#ffffff"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Tweets by @{TWITTER_HANDLE}
+      </a>
+    </div>
+  </div>
+</div>
+<style>
+  #twitter-feed-card :global(.twitter-timeline-rendered) {
+    height: 100%;
+    width: 100%;
+  }
+
+  #twitter-feed-card :global(iframe.twitter-timeline),
+  #twitter-feed-card :global(.twitter-timeline-rendered iframe) {
+    position: relative !important;
+    visibility: visible !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+</style>
+<script is:inline>
+  (function () {
+    var card = document.getElementById("twitter-feed-card");
+    var anchor = document.getElementById("twitter-feed-timeline");
+    if (!anchor) return;
+    var isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    var height = 0;
+    if (isDesktop && card) {
+      height = Math.floor(card.getBoundingClientRect().height);
+    } else {
+      height = Math.floor(window.innerHeight * 0.7);
+    }
+    if (!height || height < 200) {
+      height = Math.floor(window.innerHeight * 0.7);
+    }
+    anchor.setAttribute("data-height", String(height));
+    var src = "https://platform.twitter.com/widgets.js";
+    if (!document.querySelector('script[src="' + src + '"]')) {
+      var widget = document.createElement("script");
+      widget.src = src;
+      widget.async = true;
+      widget.charset = "utf-8";
+      document.body.appendChild(widget);
+    }
+  })();
+</script>

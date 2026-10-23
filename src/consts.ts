@@ -55,6 +55,9 @@ export const ABOUT_ME =
 /** Used for the GitHub nav link. */
 export const GITHUB_USERNAME = "droidmaximus";
 
+/** Public X/Twitter handle for the homepage timeline. */
+export const TWITTER_HANDLE = "maximustweetr";
+
 export const QUOTE = "Machine Learning Engineer";
 
 export const LOCATION = "Sunnyvale, CA";

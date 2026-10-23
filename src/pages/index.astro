@@ -2,6 +2,7 @@
 import Hero from "@/components/Hero.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Section from "@/components/Section.astro";
+import TwitterFeed from "@/components/TwitterFeed.astro";
 import Layout from "@/layouts/Layout.astro";
 import {
   KNOWN_TECH,
@@ -15,218 +16,229 @@ import {
 
 <Layout title="Avinash — Portfolio">
   <Hero />
-  <Section title="About Me">
-    <div class="w-full grid place-items-center">
-      <div
-        class="max-w-4xl text-xl md:text-lg opacity-90 text-center justify-evenly"
-      >
-        <p>{ABOUT_ME}</p>
-      </div>
-    </div>
-  </Section>
-  <Section title="Publications" full_screen={false}>
-    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-      {
-        PUBLICATIONS.map((paper) => (
-          <div class="w-full mx-auto bg-gradient-to-br relative pb-5 from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
-            <div class="flex items-center justify-start px-4 py-2 bg-white/95">
-              <div class="flex space-x-2">
-                <div class="w-3 h-3 rounded-full bg-black" />
-                <div class="w-3 h-3 rounded-full bg-black" />
-                <div class="w-3 h-3 rounded-full bg-black" />
-              </div>
-            </div>
-            <div class="p-6 tracking-wider">
-              <a
-                href={paper.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="block group"
-              >
-                <h2 class="text-xl font-medium text-white mb-2">
-                  <span class="ba text-white/70 mr-2">❯</span>
-                  {paper.title}
-                </h2>
-                <p class="text-white font-medium tracking-widest text-sm mb-4">
-                  [{paper.venue} · {paper.year}]
-                </p>
-                <p class="text-white absolute bottom-4 font-medium inline-flex items-center group-hover:underline-offset-4 underline-offset-8 underline transition-all ease-in-out">
-                  View publication
-                  <svg
-                    class="w-4 h-4 ml-2 transform group-hover:-translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-jine-join="round"
-                      stroke-width={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </p>
-              </a>
-            </div>
-          </div>
-        ))
-      }
-    </div>
-  </Section>
-  <Section title="Work Experience" full_screen={false}>
-    <div class="relative w-full">
-      <div
-        class="absolute left-4 top-0 h-full w-px bg-white/20 md:left-1/2 md:-translate-x-1/2"
-      >
-      </div>
-      {
-        CAREER_EXPERIENCE.map((experience, idx) => (
+  <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+    <aside
+      class="order-1 lg:order-2 lg:sticky lg:top-20 lg:self-start lg:flex lg:flex-col lg:h-[calc(100vh-5rem)] lg:px-4 lg:py-10"
+    >
+      <TwitterFeed />
+    </aside>
+    <div class="order-2 lg:order-1 min-w-0">
+      <Section title="About Me" contained>
+        <div class="w-full grid place-items-center">
           <div
-            class={`relative mb-6 pl-12 md:mb-10 md:w-1/2 md:pl-0 ${idx % 2 === 0 ? "md:pr-8 md:mr-auto" : "md:pl-8 md:ml-auto"}`}
+            class="max-w-4xl text-xl md:text-lg opacity-90 text-center justify-evenly"
           >
-            <div
-              class={`absolute top-5 h-3 w-3 rounded-full bg-white ring-4 ring-black ${idx % 2 === 0 ? "left-[10px] md:left-auto md:right-[-6px]" : "left-[10px] md:left-[-6px]"}`}
-            />
-            <div class="w-full mx-auto bg-gradient-to-br relative pb-5 from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
-              <div class="flex items-center justify-start px-4 py-2 bg-white/95">
-                <div class="flex space-x-2">
-                  <div class="w-3 h-3 rounded-full bg-black" />
-                  <div class="w-3 h-3 rounded-full bg-black" />
-                  <div class="w-3 h-3 rounded-full bg-black" />
+            <p>{ABOUT_ME}</p>
+          </div>
+        </div>
+      </Section>
+      <Section title="Publications" full_screen={false} contained>
+        <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            PUBLICATIONS.map((paper) => (
+              <div class="w-full mx-auto bg-gradient-to-br relative pb-5 from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
+                <div class="flex items-center justify-start px-4 py-2 bg-white/95">
+                  <div class="flex space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                  </div>
+                </div>
+                <div class="p-6 tracking-wider">
+                  <a
+                    href={paper.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block group"
+                  >
+                    <h2 class="text-xl font-medium text-white mb-2">
+                      <span class="ba text-white/70 mr-2">❯</span>
+                      {paper.title}
+                    </h2>
+                    <p class="text-white font-medium tracking-widest text-sm mb-4">
+                      [{paper.venue} · {paper.year}]
+                    </p>
+                    <p class="text-white absolute bottom-4 font-medium inline-flex items-center group-hover:underline-offset-4 underline-offset-8 underline transition-all ease-in-out">
+                      View publication
+                      <svg
+                        class="w-4 h-4 ml-2 transform group-hover:-translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-jine-join="round"
+                          stroke-width={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </p>
+                  </a>
                 </div>
               </div>
-              <div class="p-6 tracking-wider">
-                <h2 class="text-xl font-medium text-white mb-2">
-                  <span class="ba text-white/70 mr-2">❯</span>
-                  {experience.role}
-                </h2>
-                <p class="text-white font-medium tracking-widest text-sm mb-2">
-                  [{experience.company} · {experience.employmentType}]
-                </p>
-                <p class="text-white/80 text-sm font-thin mb-1">
-                  {experience.period}
-                </p>
-                {experience.location && (
-                  <p class="text-white/80 text-sm font-thin mb-3">
-                    {experience.location}
-                  </p>
-                )}
-                {experience.highlights.length > 0 && (
-                  <ul class="list-disc list-inside text-white/85 text-sm space-y-1 mb-3">
-                    {experience.highlights.map((point) => (
-                      <li>{point}</li>
-                    ))}
-                  </ul>
-                )}
-                {experience.skills && (
-                  <p class="text-white/80 text-xs font-thin">
-                    Skills: {experience.skills}
-                  </p>
-                )}
-              </div>
-            </div>
+            ))
+          }
+        </div>
+      </Section>
+      <Section title="Work Experience" full_screen={false} contained>
+        <div class="relative w-full">
+          <div
+            class="absolute left-4 top-0 h-full w-px bg-white/20 md:left-1/2 md:-translate-x-1/2"
+          >
           </div>
-        ))
-      }
-    </div>
-  </Section>
-  <Section title="Education" full_screen={false}>
-    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-      {
-        EDUCATION.map((school) => (
-          <div class="w-full mx-auto bg-gradient-to-br relative from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
-            <div class="flex items-center justify-start px-4 py-2 bg-white/95">
-              <div class="flex space-x-2">
-                <div class="w-3 h-3 rounded-full bg-black" />
-                <div class="w-3 h-3 rounded-full bg-black" />
-                <div class="w-3 h-3 rounded-full bg-black" />
-              </div>
-            </div>
-            <div class="p-6 tracking-wider">
-              <h2 class="text-xl font-medium text-white mb-2">
-                <span class="ba text-white/70 mr-2">❯</span>
-                {school.degree}
-              </h2>
-              <p class="text-white font-medium tracking-widest text-sm mb-2">
-                [{school.school}
-                {school.detail ? ` · ${school.detail}` : ""}]
-              </p>
-              <p class="text-white/80 text-sm font-thin mb-1">
-                {school.period}
-              </p>
-              <p class="text-white/80 text-sm font-thin">{school.location}</p>
-            </div>
-          </div>
-        ))
-      }
-    </div>
-  </Section>
-  <Section title="Featured Projects" full_screen={false}>
-    <div class="w-full grid grid-cols-1 gap-4">
-      {
-        FEATURED_PROJECTS.map((project) => (
-          <div class="w-full mx-auto bg-gradient-to-br relative from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
-            <div class="flex items-center justify-start px-4 py-2 bg-white/95">
-              <div class="flex space-x-2">
-                <div class="w-3 h-3 rounded-full bg-black" />
-                <div class="w-3 h-3 rounded-full bg-black" />
-                <div class="w-3 h-3 rounded-full bg-black" />
-              </div>
-            </div>
-            <div class="p-6 tracking-wider">
-              <a
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="block group"
+          {
+            CAREER_EXPERIENCE.map((experience, idx) => (
+              <div
+                class={`relative mb-6 pl-12 md:mb-10 md:w-1/2 md:pl-0 ${idx % 2 === 0 ? "md:pr-8 md:mr-auto" : "md:pl-8 md:ml-auto"}`}
               >
-                <h2 class="text-xl font-medium text-white mb-2">
-                  <span class="ba text-white/70 mr-2">❯</span>
-                  {project.name}
-                </h2>
-                <p class="text-white font-medium tracking-widest text-sm mb-3">
-                  [{project.stack}]
-                </p>
-                <p class="text-white/80 text-sm font-thin mb-3">
-                  {project.description}
-                </p>
-                <ul class="list-disc list-inside text-white/85 text-sm space-y-1 mb-4">
-                  {project.highlights.map((point) => (
-                    <li>{point}</li>
-                  ))}
-                </ul>
-                <p class="text-white font-medium inline-flex items-center group-hover:underline-offset-4 underline-offset-8 underline transition-all ease-in-out">
-                  View project
-                  <svg
-                    class="w-4 h-4 ml-2 transform group-hover:-translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class={`absolute top-5 h-3 w-3 rounded-full bg-white ring-4 ring-black ${idx % 2 === 0 ? "left-[10px] md:left-auto md:right-[-6px]" : "left-[10px] md:left-[-6px]"}`}
+                />
+                <div class="w-full mx-auto bg-gradient-to-br relative pb-5 from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
+                  <div class="flex items-center justify-start px-4 py-2 bg-white/95">
+                    <div class="flex space-x-2">
+                      <div class="w-3 h-3 rounded-full bg-black" />
+                      <div class="w-3 h-3 rounded-full bg-black" />
+                      <div class="w-3 h-3 rounded-full bg-black" />
+                    </div>
+                  </div>
+                  <div class="p-6 tracking-wider">
+                    <h2 class="text-xl font-medium text-white mb-2">
+                      <span class="ba text-white/70 mr-2">❯</span>
+                      {experience.role}
+                    </h2>
+                    <p class="text-white font-medium tracking-widest text-sm mb-2">
+                      [{experience.company} · {experience.employmentType}]
+                    </p>
+                    <p class="text-white/80 text-sm font-thin mb-1">
+                      {experience.period}
+                    </p>
+                    {experience.location && (
+                      <p class="text-white/80 text-sm font-thin mb-3">
+                        {experience.location}
+                      </p>
+                    )}
+                    {experience.highlights.length > 0 && (
+                      <ul class="list-disc list-inside text-white/85 text-sm space-y-1 mb-3">
+                        {experience.highlights.map((point) => (
+                          <li>{point}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {experience.skills && (
+                      <p class="text-white/80 text-xs font-thin">
+                        Skills: {experience.skills}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </Section>
+      <Section title="Education" full_screen={false} contained>
+        <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            EDUCATION.map((school) => (
+              <div class="w-full mx-auto bg-gradient-to-br relative from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
+                <div class="flex items-center justify-start px-4 py-2 bg-white/95">
+                  <div class="flex space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                  </div>
+                </div>
+                <div class="p-6 tracking-wider">
+                  <h2 class="text-xl font-medium text-white mb-2">
+                    <span class="ba text-white/70 mr-2">❯</span>
+                    {school.degree}
+                  </h2>
+                  <p class="text-white font-medium tracking-widest text-sm mb-2">
+                    [{school.school}
+                    {school.detail ? ` · ${school.detail}` : ""}]
+                  </p>
+                  <p class="text-white/80 text-sm font-thin mb-1">
+                    {school.period}
+                  </p>
+                  <p class="text-white/80 text-sm font-thin">
+                    {school.location}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </Section>
+      <Section title="Featured Projects" full_screen={false} contained>
+        <div class="w-full grid grid-cols-1 gap-4">
+          {
+            FEATURED_PROJECTS.map((project) => (
+              <div class="w-full mx-auto bg-gradient-to-br relative from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden">
+                <div class="flex items-center justify-start px-4 py-2 bg-white/95">
+                  <div class="flex space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                    <div class="w-3 h-3 rounded-full bg-black" />
+                  </div>
+                </div>
+                <div class="p-6 tracking-wider">
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block group"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-jine-join="round"
-                      stroke-width={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </p>
-              </a>
-            </div>
+                    <h2 class="text-xl font-medium text-white mb-2">
+                      <span class="ba text-white/70 mr-2">❯</span>
+                      {project.name}
+                    </h2>
+                    <p class="text-white font-medium tracking-widest text-sm mb-3">
+                      [{project.stack}]
+                    </p>
+                    <p class="text-white/80 text-sm font-thin mb-3">
+                      {project.description}
+                    </p>
+                    <ul class="list-disc list-inside text-white/85 text-sm space-y-1 mb-4">
+                      {project.highlights.map((point) => (
+                        <li>{point}</li>
+                      ))}
+                    </ul>
+                    <p class="text-white font-medium inline-flex items-center group-hover:underline-offset-4 underline-offset-8 underline transition-all ease-in-out">
+                      View project
+                      <svg
+                        class="w-4 h-4 ml-2 transform group-hover:-translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-jine-join="round"
+                          stroke-width={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </p>
+                  </a>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </Section>
+      <Section title="Technologies I Know" full_screen={false} contained>
+        <div class="w-full grid place-items-center">
+          <div
+            class="w-full gap-4 flex flex-wrap px-3 max-w-xl text-lg justify-center"
+          >
+            {KNOWN_TECH.map((x) => <Breadcrumb title={x} />)}
           </div>
-        ))
-      }
+        </div>
+      </Section>
     </div>
-  </Section>
-  <Section title="Technologies I Know" full_screen={false}>
-    <div class="w-full grid place-items-center">
-      <div
-        class="w-full gap-4 flex flex-wrap px-3 max-w-xl text-lg justify-center"
-      >
-        {KNOWN_TECH.map((x) => <Breadcrumb title={x} />)}
-      </div>
-    </div>
-  </Section>
+  </div>
 </Layout>
