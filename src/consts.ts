@@ -1,6 +1,31 @@
 export const SITE_TITLE = "Avinash";
+export const SITE_SEO_TITLE =
+  "Avinash Bhojanapalli — AI & Machine Learning Engineer | Sunnyvale, CA";
 export const SITE_DESCRIPTION =
-  "Portfolio of Avinash Bhojanapalli, a machine learning engineer based in Sunnyvale, CA. Production ML systems, projects, and publications.".trim();
+  "Avinash Bhojanapalli — AI Engineer and Machine Learning Engineer in Sunnyvale, CA (Bay Area). Production ML systems, LLM agents, RAG, knowledge graphs, MLOps, Rust/Python/Go, and published research (M.S. Data Science, RIT).".trim();
+export const SITE_KEYWORDS = [
+  "Avinash Bhojanapalli",
+  "AI Engineer",
+  "Machine Learning Engineer",
+  "ML Engineer",
+  "Founding Machine Learning Engineer",
+  "MLOps Engineer",
+  "Applied AI Engineer",
+  "LLM Engineer",
+  "Sunnyvale CA",
+  "San Francisco Bay Area",
+  "Silicon Valley",
+  "PyTorch",
+  "Rust",
+  "Go",
+  "Python",
+  "RAG",
+  "Knowledge Graphs",
+  "Multi-Agent Systems",
+  "Self-Supervised Learning",
+  "Quantitative Research",
+  "Rochester Institute of Technology",
+].join(", ");
 
 /** Default Open Graph / Twitter card image (absolute path under `public/`). */
 export const SITE_OG_IMAGE = "/screenshot.png";

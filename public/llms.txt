@@ -1,0 +1,60 @@
+# Avinash Bhojanapalli — AI & Machine Learning Engineer
+
+> Machine learning and AI engineer based in Sunnyvale, CA (San Francisco Bay Area). Building low-latency production ML decisioning systems, LLM / SQL agents, knowledge graphs, retrieval engines, and high-throughput Rust/Python/Go tooling.
+
+- Website: https://avinash.social
+- Resume (PDF): https://avinash.social/Avinash%20Bhojanapalli.pdf
+- Location: Sunnyvale, CA (Bay Area / Silicon Valley)
+- GitHub: https://github.com/droidmaximus
+- Google Scholar: https://scholar.google.com/citations?user=54hzlgUAAAAJ&hl=en
+- LinkedIn: https://www.linkedin.com/in/avinash-bhojanapalli/
+- X / Twitter: https://x.com/maximustweetr
+
+## Target Roles & Areas
+
+- AI Engineer, Machine Learning Engineer, Founding ML Engineer, Applied AI Engineer, LLM / Agent Engineer, MLOps Engineer, Research Engineer, Quantitative ML Researcher
+
+## Experience
+
+- **Founding Machine Learning Engineer — dCortex** (Full-time, May 2026 – Sep 2026)
+  - Cut last-minute coverage scrambles ~40% by building a live 72-hour risk model that scores 8,000+ crew-duty pairs per window in under 100ms.
+  - Cut override diagnosis ~70%, from a full-slate review to seconds, by building counterfactual analysis across 400+ live decisions.
+  - Built a chat agent that writes and runs SQL so controllers can fetch crew identity, reserve status, and legality details in plain language, cutting lookup time ~80%.
+- **Machine Learning Engineer — Bonsai Lab, RIT** (Research, Aug 2025 – Apr 2026)
+  - Cut experiment iteration time by 60% with a modular PyTorch self-supervised learning pipeline for rapid representation comparisons.
+  - Optimized data loading with pre-fetching and caching, raising GPU utilization and shortening training time.
+  - Added automated experiment tracking and artifact versioning so distributed runs stay reproducible.
+- **MLOps Engineer Intern — Incribo** (Internship, Jan 2024 – Jul 2024)
+  - Designed and deployed a fault-tolerant microservices architecture for multi-agent AI systems on Kubernetes and Docker with RabbitMQ.
+  - Cut GPU memory use by 15% and improved inference latency by serving LLMs with gradient checkpointing and dynamic batching.
+  - Built a Go CLI to automate container orchestration and deployment.
+  - Integrated synthetic data generation with CPPN-NEAT neuroevolution (+15% generation rate).
+
+## Featured Projects
+
+- **Asclepius** — https://asclepius.avinash.social (Code: https://github.com/droidmaximus/asclepius)
+  - Stack: React, TanStack Start, Tailwind, Cytoscape.js, Supabase, Python, Selenium
+  - AI atlas for rare diseases: Selenium bots scrape disease catalogues, trial registries, papers, and patient-group sites and reconcile them into a 1,461-node, 2,372-edge knowledge graph with source-backed claims.
+- **Crosstem** — https://pypi.org/project/crosstem/
+  - Stack: Rust, Python, PyO3, PyPI
+  - High-performance multilingual NLP stemming library with a Rust core and Python API (2.7–2.9x faster than Python fallback, 15x higher throughput than Porter).
+- **Ledgerline** — https://github.com/droidmaximus/ledgerline
+  - Stack: Go, Python, Kafka, Redis, PostgreSQL
+  - Event-driven, vectorless RAG engine for 200+ page financial filings using hierarchical tree navigation, WebSocket streaming (<3s latency), and an LLM-as-a-judge layer.
+- **Topological Arbitrage Engine** — https://github.com/droidmaximus/topological-arbitrage
+  - Stack: Python, Pandas, SciPy, Flask
+  - Market-neutral statistical arbitrage strategy applying graph Laplacian diffusion to CAPM residuals across an 80-stock universe (42.5% annualized return, 1.99 Sharpe out-of-sample).
+
+## Publications
+
+- *Evolving RNNs for Stock Forecasting: A Low Parameter Efficient Alternative to Transformers* — EvoApplications (2025), https://doi.org/10.1007/978-3-031-90065-5_3
+- *A CALIPSO Observation Based 3-Dimensional Tropospheric Aerosol Classification Model Over Delhi* — IEEE IGARSS (2023), https://doi.org/10.1109/IGARSS52108.2023.10282609
+
+## Education
+
+- **Rochester Institute of Technology (RIT)** — M.S. in Data Science, GPA 3.9/4.0 (Aug 2024 – Apr 2026, Rochester, NY)
+- **IIIT Sri City** — B.Tech in Computer Science and Engineering (Dec 2020 – May 2024, India)
+
+## Technical Stack
+
+Python, C++, Go, Rust, SQL, Bash, PyTorch, TensorFlow, Scikit-learn, Hugging Face, LangChain, ONNX, FastAPI, RESTful APIs, Microservices, Docker, Kubernetes, AWS SageMaker, AWS Lambda, AWS ECR, GCP Vertex AI, MLflow, GitHub Actions, Grafana, PostgreSQL, MongoDB, Redis, ChromaDB, Apache Kafka, Neo4j, SQLite, Linux, Git.

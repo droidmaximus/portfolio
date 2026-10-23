@@ -1,21 +1,142 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import "@/styles/global.css";
-import { ABOUT_ME, SITE_OG_IMAGE, SITE_TITLE } from "@/consts";
+import {
+  ABOUT_ME,
+  CAREER_EXPERIENCE,
+  EDUCATION,
+  FEATURED_PROJECTS,
+  GITHUB_USERNAME,
+  KNOWN_TECH,
+  PUBLICATIONS,
+  RESUME_PDF_SRC,
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_OG_IMAGE,
+  SITE_SEO_TITLE,
+  TWITTER_HANDLE,
+} from "@/consts";
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
   image?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteOrigin = Astro.site ?? new URL("https://avinash.social");
+const canonicalURL = new URL(Astro.url.pathname, siteOrigin);
 
 const {
-  title = SITE_TITLE,
-  description = ABOUT_ME,
+  title = SITE_SEO_TITLE,
+  description = SITE_DESCRIPTION,
   image = SITE_OG_IMAGE,
 } = Astro.props;
+
+const ogImageURL = new URL(image, siteOrigin).toString();
+const resumeURL = new URL(RESUME_PDF_SRC, siteOrigin).toString();
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteOrigin.origin}/#website`,
+      url: siteOrigin.origin,
+      name: "Avinash Bhojanapalli — AI & Machine Learning Engineer",
+      description: SITE_DESCRIPTION,
+      inLanguage: "en-US",
+      publisher: { "@id": `${siteOrigin.origin}/#person` },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${canonicalURL.toString()}#profilepage`,
+      url: canonicalURL.toString(),
+      name: title,
+      description,
+      inLanguage: "en-US",
+      isPartOf: { "@id": `${siteOrigin.origin}/#website` },
+      about: { "@id": `${siteOrigin.origin}/#person` },
+      mainEntity: { "@id": `${siteOrigin.origin}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteOrigin.origin}/#person`,
+      name: "Avinash Bhojanapalli",
+      givenName: "Avinash",
+      familyName: "Bhojanapalli",
+      alternateName: ["Avinash", GITHUB_USERNAME],
+      url: siteOrigin.origin,
+      image: ogImageURL,
+      description: ABOUT_ME,
+      jobTitle: [
+        "Machine Learning Engineer",
+        "AI Engineer",
+        "Founding Machine Learning Engineer",
+        "MLOps Engineer",
+      ],
+      worksFor: {
+        "@type": "Organization",
+        name: CAREER_EXPERIENCE[0]?.company ?? "dCortex",
+      },
+      alumniOf: EDUCATION.map((ed) => ({
+        "@type": "CollegeOrUniversity",
+        name: ed.school,
+      })),
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Sunnyvale",
+        addressRegion: "CA",
+        addressCountry: "US",
+      },
+      knowsAbout: [
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Deep Learning",
+        "Large Language Models",
+        "Retrieval-Augmented Generation",
+        "Knowledge Graphs",
+        "Multi-Agent Systems",
+        "Self-Supervised Learning",
+        "MLOps",
+        "Natural Language Processing",
+        "Quantitative Modeling",
+        ...KNOWN_TECH,
+      ],
+      sameAs: [
+        `https://github.com/${GITHUB_USERNAME}`,
+        "https://scholar.google.com/citations?user=54hzlgUAAAAJ&hl=en",
+        "https://www.linkedin.com/in/avinash-bhojanapalli/",
+        `https://x.com/${TWITTER_HANDLE}`,
+      ],
+      subjectOf: {
+        "@type": "DigitalDocument",
+        name: "Avinash Bhojanapalli — Resume (PDF)",
+        url: resumeURL,
+        encodingFormat: "application/pdf",
+      },
+    },
+    ...PUBLICATIONS.map((paper) => ({
+      "@type": "ScholarlyArticle",
+      headline: paper.title,
+      name: paper.title,
+      datePublished: String(paper.year),
+      publisher: { "@type": "Organization", name: paper.venue },
+      author: { "@id": `${siteOrigin.origin}/#person` },
+      url: paper.href,
+      sameAs: paper.href,
+    })),
+    ...FEATURED_PROJECTS.map((project) => ({
+      "@type": "SoftwareSourceCode",
+      name: project.name,
+      description: `${project.description} ${project.highlights.join(" ")}`,
+      programmingLanguage: project.stack.split("·").map((s) => s.trim()),
+      author: { "@id": `${siteOrigin.origin}/#person` },
+      url: project.href.startsWith("//")
+        ? `https:${project.href}`
+        : project.href,
+    })),
+  ],
+};
 ---
 
 <!-- Global Metadata -->
@@ -23,7 +144,20 @@ const {
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="author" content="Avinash Bhojanapalli" />
+<meta name="keywords" content={SITE_KEYWORDS} />
+<meta
+  name="robots"
+  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+/>
+<meta name="geo.region" content="US-CA" />
+<meta name="geo.placename" content="Sunnyvale, California" />
 <link rel="sitemap" href="/sitemap-index.xml" />
+<link
+  rel="alternate"
+  type="text/plain"
+  href="/llms.txt"
+  title="LLM & AI Recruiter Summary"
+/>
 
 <!-- Font preloads -->
 <link
@@ -43,19 +177,32 @@ const {
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:type" content="profile" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
-<meta property="og:site_name" content="Avinash" />
+<meta property="og:image" content={ogImageURL} />
+<meta
+  property="og:image:alt"
+  content="Avinash Bhojanapalli — AI & Machine Learning Engineer"
+/>
+<meta property="og:site_name" content="Avinash Bhojanapalli" />
+<meta property="profile:first_name" content="Avinash" />
+<meta property="profile:last_name" content="Bhojanapalli" />
+<meta property="profile:username" content={GITHUB_USERNAME} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:site" content={`@${TWITTER_HANDLE}`} />
+<meta property="twitter:creator" content={`@${TWITTER_HANDLE}`} />
+<meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:image" content={ogImageURL} />
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
 <!-- View Transitions  -->
 <ClientRouter />
