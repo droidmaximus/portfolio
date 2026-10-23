@@ -88,10 +88,45 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
       parent.appendChild(paragraph);
     }
 
+    function videoSource(item) {
+      var formats = item && Array.isArray(item.formats) ? item.formats : [];
+      var candidates = [];
+      formats.forEach(function (format) {
+        if (!format || format.container !== "mp4" || format.codec !== "h264")
+          return;
+        if (!isMediaUrl(format.url)) return;
+        candidates.push(format);
+      });
+      if (!candidates.length) return isMediaUrl(item.url) ? item.url : "";
+      candidates.sort(function (a, b) {
+        return (a.bitrate || 0) - (b.bitrate || 0);
+      });
+      var duration = typeof item.duration === "number" ? item.duration : 0;
+      var chosen = candidates[0];
+      candidates.forEach(function (format) {
+        var bytes =
+          duration > 0 && format.bitrate ? (format.bitrate / 8) * duration : 0;
+        if (!bytes || bytes <= 4000000) chosen = format;
+      });
+      return chosen.url;
+    }
+
+    function attachVideoSource(video, source) {
+      fetch(source, { referrerPolicy: "no-referrer" })
+        .then(function (response) {
+          if (!response.ok) throw new Error("video");
+          return response.blob();
+        })
+        .then(function (blob) {
+          video.src = URL.createObjectURL(blob);
+        })
+        .catch(function () {});
+    }
+
     function addMedia(parent, status) {
       mediaList(status).forEach(function (item) {
         if (!item) return;
-        var source = isMediaUrl(item.url) ? item.url : "";
+        var source = videoSource(item);
         var thumb = isMediaUrl(item.thumbnail_url) ? item.thumbnail_url : "";
         if (item.type === "video" || item.type === "gif") {
           if (!source && !thumb) return;
@@ -102,7 +137,7 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
           video.preload = "metadata";
           if (item.type === "gif") video.loop = true;
           if (thumb) video.poster = thumb;
-          if (source) video.src = source;
+          if (source) attachVideoSource(video, source);
           parent.appendChild(video);
           return;
         }
