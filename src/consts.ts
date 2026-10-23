@@ -81,8 +81,6 @@ export const FEATURED_PROJECTS: Array<{
   stack: string;
   href: string;
   highlights: string[];
-  image?: string;
-  imageAlt?: string;
 }> = [
   {
     name: "Asclepius",
@@ -90,13 +88,10 @@ export const FEATURED_PROJECTS: Array<{
       "An AI atlas for the world's rare diseases. Find the studies, research, and people connected to a disease, and a next step for this week.",
     stack: "React · TanStack Start · Tailwind · Cytoscape.js · Supabase",
     href: "https://asclepius.avinash.social",
-    image: "/asclepius-home.png",
-    imageAlt:
-      "Asclepius home screen with a search box for a disease, gene, symptom, patient group, or pathway.",
     highlights: [
-      "One search resolves a disease, gene, symptom, patient group, or pathway, synonyms included, to a single ontology node.",
-      "The atlas maps 1,461 nodes and 2,372 connections, and the pipeline refuses to write a line that has no source or retrieval date.",
-      "Ranked next steps for the week, and drafted emails are rejected unless every cited claim is already stored in the atlas.",
+      "Selenium bots scrape disease catalogues, trial registries, papers, and patient-group sites that otherwise sit in separate databases.",
+      "Those records are reconciled into one knowledge graph: 1,461 nodes and 2,372 connections across genes, symptoms, studies, registries, and groups.",
+      "Every edge keeps its source, and search walks the graph to rank neighbouring diseases and a next step for the week.",
     ],
   },
   {
