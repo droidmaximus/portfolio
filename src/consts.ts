@@ -172,9 +172,9 @@ export const CAREER_EXPERIENCE: Array<{
     employmentType: "Full-time",
     period: "May 2026 – Sep 2026",
     highlights: [
-      "Cut last-minute coverage scrambles ~40% by building a live 72-hour risk model that scores 8,000+ crew-duty pairs per window in under 100ms.",
-      "Cut override diagnosis ~70%, from a full-slate review to seconds, by building counterfactual analysis across 400+ live decisions.",
-      "Built a chat agent that writes and runs SQL so controllers can fetch crew identity, reserve status, and legality details in plain language, cutting lookup time ~80%.",
+      "Cut last-minute coverage scrambles ~40% (~$6.5M/yr in protected flight revenue and avoided reserve/recrewing costs across a 430+ daily-flight carrier) by building a live 72-hour risk model that scores 8,000+ crew-duty pairs per window in under 100ms.",
+      "Cut override diagnosis ~70%, from a full-slate review to seconds (~$2.2M/yr in avoided cascade delays and suboptimal deadhead/reserve reassignments), by building counterfactual analysis across 400+ live decisions.",
+      "Built a chat agent that writes and runs SQL so controllers can fetch crew identity, reserve status, and legality details in plain language, cutting lookup time ~80% (~$1.1M/yr in recovered dispatch throughput and avoided FAR Part 117 legality timeouts).",
     ],
   },
   {
