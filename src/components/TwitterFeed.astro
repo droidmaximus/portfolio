@@ -2,7 +2,7 @@
 import { TWITTER_HANDLE } from "@/consts";
 
 const profileUrl = `https://x.com/${TWITTER_HANDLE}`;
-const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`;
+const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses?with_replies=1`;
 ---
 
 <div
@@ -18,16 +18,16 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
       <div class="h-3 w-3 rounded-full bg-black"></div>
     </div>
   </div>
-  <div class="flex min-h-0 flex-1 flex-col p-6 tracking-wider">
+  <div class="flex min-h-0 flex-1 flex-col p-4 tracking-wider">
     <a
       href={profileUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="mb-4 text-xl font-medium text-white"
+      class="mb-3 px-2 text-xl font-medium text-white"
     >
       <span class="ba mr-2 text-white/70">❯</span>@{TWITTER_HANDLE}
     </a>
-    <div id="twitter-feed-posts" class="min-h-0 flex-1 overflow-y-auto">
+    <div id="twitter-feed-posts" class="min-h-0 flex-1 overflow-y-auto px-1">
       <a
         id="twitter-feed-fallback"
         href={profileUrl}
@@ -48,6 +48,7 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
     var feedUrl = card.getAttribute("data-feed-url");
     var profileUrl = card.getAttribute("data-profile-url");
     if (!feedUrl) return;
+    var apiOrigin = "https://api.fxtwitter.com";
 
     function formatDate(value) {
       var date = new Date(value);
@@ -67,6 +68,174 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
       );
     }
 
+    function isMediaUrl(url) {
+      return (
+        typeof url === "string" &&
+        (url.indexOf("https://pbs.twimg.com/") === 0 ||
+          url.indexOf("https://video.twimg.com/") === 0)
+      );
+    }
+
+    function loadJson(url) {
+      return fetch(url)
+        .then(function (response) {
+          return response.ok ? response.json() : null;
+        })
+        .catch(function () {
+          return null;
+        });
+    }
+
+    function mediaList(status) {
+      var media = status && status.media;
+      return media && Array.isArray(media.all) ? media.all : [];
+    }
+
+    function addText(parent, text, className) {
+      if (!text) return;
+      var paragraph = document.createElement("p");
+      paragraph.className = className;
+      paragraph.textContent = text;
+      parent.appendChild(paragraph);
+    }
+
+    function addMedia(parent, status) {
+      mediaList(status).forEach(function (item) {
+        if (!item) return;
+        var source = isMediaUrl(item.url) ? item.url : "";
+        var thumb = isMediaUrl(item.thumbnail_url) ? item.thumbnail_url : "";
+        if (item.type === "video" || item.type === "gif") {
+          if (!source && !thumb) return;
+          var video = document.createElement("video");
+          video.className = "mt-2 w-full bg-black";
+          video.controls = true;
+          video.playsInline = true;
+          video.preload = "metadata";
+          if (item.type === "gif") video.loop = true;
+          if (thumb) video.poster = thumb;
+          if (source) video.src = source;
+          parent.appendChild(video);
+          return;
+        }
+        var imageUrl = source || thumb;
+        if (!imageUrl) return;
+        var image = document.createElement("img");
+        image.className = "mt-2 w-full";
+        image.alt = "";
+        image.src = imageUrl;
+        parent.appendChild(image);
+      });
+    }
+
+    function addLinkCard(parent, status) {
+      var preview = status && status.card;
+      if (!preview || mediaList(status).length) return;
+      var box = document.createElement("a");
+      box.className =
+        "mt-2 block border border-white/30 p-2 text-white no-underline";
+      if (typeof preview.url === "string" && preview.url.indexOf("https://") === 0) {
+        box.href = preview.url;
+        box.target = "_blank";
+        box.rel = "noopener noreferrer";
+      }
+      var imageUrl =
+        preview.image && isMediaUrl(preview.image.url) ? preview.image.url : "";
+      if (imageUrl) {
+        var image = document.createElement("img");
+        image.className = "mb-2 w-full";
+        image.alt = "";
+        image.src = imageUrl;
+        box.appendChild(image);
+      }
+      addText(box, preview.title, "text-sm text-white");
+      addText(box, preview.description, "mt-1 text-xs text-white/70");
+      if (box.childElementCount) parent.appendChild(box);
+    }
+
+    function addQuote(parent, status) {
+      var quote = status && status.quote;
+      if (!quote) return;
+      var box = document.createElement("div");
+      box.className = "mt-2 border border-white/40 p-2";
+      if (quote.type === "tombstone") {
+        addText(box, quote.message || "Quoted post is unavailable", "text-xs text-white/60");
+        parent.appendChild(box);
+        return;
+      }
+      if (quote.type !== "status") return;
+      var author = quote.author && quote.author.screen_name;
+      addText(
+        box,
+        author ? "quoting @" + author : "quoting",
+        "mb-1 text-xs uppercase tracking-widest text-white/50",
+      );
+      addText(box, quote.text, "whitespace-pre-wrap text-sm text-white/85");
+      addMedia(box, quote);
+      if (isStatusUrl(quote.url)) {
+        var link = document.createElement("a");
+        link.href = quote.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.className = "mt-2 inline-block text-xs text-white/70 underline";
+        link.textContent = "Open quote";
+        box.appendChild(link);
+      }
+      parent.appendChild(box);
+    }
+
+    function addCounts(parent, status) {
+      var parts = [];
+      if (status.reposts) parts.push(status.reposts + " reposts");
+      if (status.likes) parts.push(status.likes + " likes");
+      var when = formatDate(status.created_at);
+      if (when) parts.push(when);
+      addText(parent, parts.join(" · "), "mt-2 text-xs text-white/55");
+    }
+
+    function renderPost(entry) {
+      var status = entry.status;
+      var article = document.createElement("article");
+      article.className = "mb-3 border border-white/30 p-3 last:mb-0";
+
+      if (entry.parent && entry.parent.text) {
+        var context = document.createElement("div");
+        context.className = "mb-2 border-l border-white/40 pl-2";
+        var replyName =
+          (status.replying_to && status.replying_to.screen_name) ||
+          (entry.parent.author && entry.parent.author.screen_name);
+        addText(
+          context,
+          replyName ? "replying to @" + replyName : "replying to",
+          "text-xs uppercase tracking-widest text-white/50",
+        );
+        addText(context, entry.parent.text, "mt-1 whitespace-pre-wrap text-xs text-white/75");
+        article.appendChild(context);
+      } else if (status.replying_to && status.replying_to.screen_name) {
+        addText(
+          article,
+          "replying to @" + status.replying_to.screen_name,
+          "mb-2 text-xs uppercase tracking-widest text-white/50",
+        );
+      }
+
+      addText(article, status.text, "whitespace-pre-wrap text-sm text-white/90");
+      addMedia(article, status);
+      addLinkCard(article, status);
+      addQuote(article, status);
+      addCounts(article, status);
+
+      if (isStatusUrl(status.url)) {
+        var link = document.createElement("a");
+        link.href = status.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.className = "mt-2 inline-block text-xs text-white underline";
+        link.textContent = "Open post";
+        article.appendChild(link);
+      }
+      return article;
+    }
+
     fetch(feedUrl)
       .then(function (response) {
         if (!response.ok) throw new Error("feed unavailable");
@@ -74,39 +243,34 @@ const feedUrl = `https://api.fxtwitter.com/2/profile/${TWITTER_HANDLE}/statuses`
       })
       .then(function (payload) {
         var results = payload && payload.results;
-        if (!Array.isArray(results) || results.length === 0) return;
+        if (!Array.isArray(results)) return [];
+        return results
+          .filter(function (status) {
+            return status && status.text && isStatusUrl(status.url);
+          })
+          .slice(0, 6);
+      })
+      .then(function (statuses) {
+        return Promise.all(
+          statuses.map(function (status) {
+            var parentId = status.replying_to && status.replying_to.status;
+            var parentJob = parentId
+              ? loadJson(apiOrigin + "/2/status/" + parentId).then(function (data) {
+                  return data && data.status;
+                })
+              : Promise.resolve(null);
+            return parentJob.then(function (parent) {
+              return { status: status, parent: parent };
+            });
+          }),
+        );
+      })
+      .then(function (entries) {
+        if (!entries.length) return;
         posts.textContent = "";
-        results.slice(0, 8).forEach(function (status) {
-          if (!status || !status.text || !isStatusUrl(status.url)) return;
-          var link = document.createElement("a");
-          link.href = status.url;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.className =
-            "mb-3 block border border-white/30 p-3 text-sm text-white no-underline last:mb-0";
-          var body = document.createElement("p");
-          body.className = "mb-2 whitespace-pre-wrap text-white/90";
-          body.textContent = status.text;
-          link.appendChild(body);
-          var when = formatDate(status.created_at);
-          if (when) {
-            var time = document.createElement("p");
-            time.className = "text-xs text-white/60";
-            time.textContent = when;
-            link.appendChild(time);
-          }
-          posts.appendChild(link);
+        entries.forEach(function (entry) {
+          posts.appendChild(renderPost(entry));
         });
-        if (!posts.childElementCount && profileUrl) {
-          posts.textContent = "";
-          var fallback = document.createElement("a");
-          fallback.href = profileUrl;
-          fallback.target = "_blank";
-          fallback.rel = "noopener noreferrer";
-          fallback.className = "text-sm text-white/80 underline";
-          fallback.textContent = "Tweets by @" + profileUrl.split("/").pop();
-          posts.appendChild(fallback);
-        }
       })
       .catch(function () {});
   })();
